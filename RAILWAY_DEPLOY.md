@@ -5,7 +5,7 @@ I have updated the application to be Railway-ready. All code changes have been p
 ## Step 1: Connect to Railway
 1.  Go to [Railway.app](https://railway.app/).
 2.  Click **New Project** > **Deploy from GitHub repo**.
-3.  Select `2411cs020681/FIRE-COMMAND-AI-CITY-EVACUATION-MEDICAL-RESPONSE-COPILOT`.
+3.  Select `mohammedshaz9/fire1`.
 
 ## Step 2: Add Environment Variables
 Railway needs the following variables (from your local `.env`) to power the AI and Maps. Click on your service in Railway, go to **Variables**, and add:
