@@ -21,8 +21,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    // Determine the socket URL based on the environment
-    const socketUrl = window.location.origin;
+    // Determine the socket URL based on the environment (Vercel vs Local)
+    const socketUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
     
     const socketInstance = io(socketUrl, {
       transports: ["websocket"],

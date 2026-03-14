@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
@@ -34,6 +35,12 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
+  // Enable CORS for frontend deployments (e.g. Vercel)
+  app.use(cors({
+    origin: "*", // Allow all for demo; can be restricted to Vercel URL
+    credentials: true
+  }));
+
   // Initialize Socket.io
   initSocket(server);
 
@@ -65,7 +72,7 @@ async function startServer() {
 
   const preferredPort = parseInt(process.env.PORT || "3000");
   const isProd = process.env.NODE_ENV === "production";
-  
+
   // In production (e.g. Railway), we must listen strictly on the assigned PORT
   const port = isProd ? preferredPort : await findAvailablePort(preferredPort);
 
