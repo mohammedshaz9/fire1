@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm run build:client",
-  "outputDirectory": "dist",
+  "outputDirectory": "dist/public",
   "public": true,
   "rewrites": [
     {
