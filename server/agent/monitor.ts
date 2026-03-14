@@ -408,7 +408,7 @@ export function startMonitorLoop() {
 
       // Broadcast full state to all clients
       setFireCommandState(state);
-      broadcastFireCommand({ ...state, agent_log: _agentLog });
+      broadcastFireCommand(state);
 
     } catch (error) {
       console.error("[FireCommand] Orchestration error:", error);

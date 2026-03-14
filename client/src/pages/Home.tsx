@@ -39,6 +39,7 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const isMobile = useIsMobile();
   const [commandState, setCommandState] = useState<any>(null);
+  const lastPhaseRef = useRef<string | null>(null);
   const [isTriggering, setIsTriggering] = useState(false);
   const [spreadHeatmap, setSpreadHeatmap] = useState<any[]>([]);
   const [elapsedTimer, setElapsedTimer] = useState(0);
@@ -58,6 +59,7 @@ export default function Home() {
   const resetMutation = trpc.emergency.resetFireCommand.useMutation({
     onSuccess: () => {
       setCommandState(null);
+      lastPhaseRef.current = null;
       setSpreadHeatmap([]);
       setElapsedTimer(0);
       toast.success("SYSTEM RESET — All clear");
@@ -165,16 +167,19 @@ export default function Home() {
     if (!socket) return;
 
     socket.on("firecommand_update", (state: any) => {
-      const prevPhase = commandState?.phase;
       setCommandState(state);
       if (state?.timer_seconds) setElapsedTimer(state.timer_seconds);
 
-      // Trigger alerts on detection
-      if (state?.phase === 'SPREADING' && prevPhase === 'DETECTING') {
+      // Trigger alerts on detection (transition from DETECTING to SPREADING)
+      if (state?.phase === 'SPREADING' && lastPhaseRef.current === 'DETECTING') {
         playAlarm();
         sendPushNotification(`FIRE DETECTED at ${state.incident_summary.location.zone}. AI Orchestration initiated.`);
         document.body.classList.add('alert-flash-red');
         setTimeout(() => document.body.classList.remove('alert-flash-red'), 2000);
+      }
+
+      if (state?.phase) {
+        lastPhaseRef.current = state.phase;
       }
     });
 
@@ -186,7 +191,7 @@ export default function Home() {
       socket.off("firecommand_update");
       socket.off("spread_update");
     };
-  }, [socket]);
+  }, [socket, playAlarm, sendPushNotification]);
 
   const handleTrigger = () => {
     setIsTriggering(true);
