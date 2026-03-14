@@ -64,14 +64,17 @@ async function startServer() {
   }
 
   const preferredPort = parseInt(process.env.PORT || "3000");
-  const port = await findAvailablePort(preferredPort);
+  const isProd = process.env.NODE_ENV === "production";
+  
+  // In production (e.g. Railway), we must listen strictly on the assigned PORT
+  const port = isProd ? preferredPort : await findAvailablePort(preferredPort);
 
-  if (port !== preferredPort) {
+  if (!isProd && port !== preferredPort) {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on port ${port} (mode: ${process.env.NODE_ENV || 'development'})`);
   });
 }
 
