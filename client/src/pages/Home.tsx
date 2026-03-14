@@ -46,11 +46,12 @@ export default function Home() {
   const triggerMutation = trpc.emergency.triggerFireCommand.useMutation({
     onSuccess: () => {
       setIsTriggering(false);
-      toast.error("🔥 FIRECOMMAND INITIATED — Multi-agent orchestration active");
+      toast.success("🔥 FIRECOMMAND INITIATED — Multi-agent orchestration active");
     },
-    onError: () => {
+    onError: (err) => {
       setIsTriggering(false);
-      toast.error("Failed to trigger FireCommand");
+      console.error("[FireCommand Error]", err);
+      toast.error(`Trigger Failed: ${err.message || 'Server Unreachable'}`);
     }
   });
 
