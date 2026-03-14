@@ -8,7 +8,7 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/cannon";
 import { OrbitControls as OrbitControlsImpl, PerspectiveCamera as PerspectiveCameraImpl } from "@react-three/drei";
 import { useIsMobile } from "@/hooks/useMobile";
-import React, { useState, Suspense, useEffect, useCallback } from "react";
+import React, { useState, Suspense, useEffect, useCallback, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import { useSocket } from "@/contexts/SocketContext";
 import { toast } from 'sonner';
